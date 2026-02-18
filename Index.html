@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Material Request</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 24px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .header-info {
+            display: flex;
+            gap: 24px;
+            margin-top: 8px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        .mr-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .content {
+            padding: 24px;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .summary-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .summary-card h3 {
+            font-size: 12px;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .summary-card .value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #212529;
+        }
+
+        .item-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .item-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 4px;
+        }
+
+        .item-subtitle {
+            font-size: 13px;
+            color: #6c757d;
+        }
+
+        .status-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-selesai {
+            background: #D4EDDA;
+            color: #155724;
+        }
+
+        .status-partial {
+            background: #FFF3CD;
+            color: #856404;
+        }
+
+        .status-pending {
+            background: #F8D7DA;
+            color: #721C24;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .stat-box .label {
+            font-size: 11px;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .stat-box .value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #212529;
+        }
+
+        .stat-box.highlight {
+            background: #E3F2FD;
+        }
+
+        .stat-box.highlight .value {
+            color: #1976D2;
+        }
+
+        .arrivals-section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .arrivals-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .arrivals-table thead {
+            background: #f8f9fa;
+        }
+
+        .arrivals-table th {
+            padding: 12px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #495057;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .arrivals-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 14px;
+            color: #212529;
+        }
+
+        .arrivals-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .arrivals-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6c757d;
+        }
+
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+        }
+
+        .input-section {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 16px;
+        }
+
+        .input-section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 10px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2196F3;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .submit-btn:hover {
+            background: #1976D2;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #2196F3, #1976D2);
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 0;
+            }
+
+            .content {
+                padding: 16px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <div>
+                    <h1>Detail Material Request</h1>
+                    <div class="header-info">
+                        <div class="info-item">
+                            <span>📋</span>
+                            <span id="mrCode">MR-001</span>
+                        </div>
+                        <div class="info-item">
+                            <span>📅</span>
+                            <span id="mrDate">1 Jan 2025</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mr-badge" id="overallStatus">Dalam Progress</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <h3>Total Item</h3>
+                    <div class="value" id="totalItems">0</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Item Selesai</h3>
+                    <div class="value" id="completedItems">0</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Total Qty Pesan</h3>
+                    <div class="value" id="totalQtyPesan">0</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Total Qty Datang</h3>
+                    <div class="value" id="totalQtyDatang">0</div>
+                </div>
+            </div>
+
+            <div id="itemsContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        const mrItems = [
+            { id: 1, nama: "Jaket", qty_pesan: 200, arrivals: [] },
+            { id: 2, nama: "Kaos", qty_pesan: 300, arrivals: [] }
+        ];
+
+        function calculateStats() {
+            const stats = {
+                totalItems: mrItems.length,
+                completedItems: 0,
+                totalQtyPesan: 0,
+                totalQtyDatang: 0
+            };
+
+            mrItems.forEach(item => {
+                const totalDatang = item.arrivals.reduce((sum, a) => sum + a.qty, 0);
+                const sisa = item.qty_pesan - totalDatang;
+                
+                stats.totalQtyPesan += item.qty_pesan;
+                stats.totalQtyDatang += totalDatang;
+                
+                if (sisa <= 0) {
+                    stats.completedItems++;
+                }
+            });
+
+            return stats;
+        }
+
+        function updateSummary() {
+            const stats = calculateStats();
+            
+            document.getElementById('totalItems').textContent = stats.totalItems;
+            document.getElementById('completedItems').textContent = stats.completedItems;
+            document.getElementById('totalQtyPesan').textContent = stats.totalQtyPesan;
+            document.getElementById('totalQtyDatang').textContent = stats.totalQtyDatang;
+
+            // Update overall status
+            const overallStatus = document.getElementById('overallStatus');
+            if (stats.completedItems === stats.totalItems) {
+                overallStatus.textContent = 'Selesai ✓';
+                overallStatus.style.background = 'rgba(40, 167, 69, 0.2)';
+            } else if (stats.totalQtyDatang > 0) {
+                overallStatus.textContent = 'Dalam Progress';
+                overallStatus.style.background = 'rgba(255, 193, 7, 0.2)';
+            } else {
+                overallStatus.textContent = 'Pending';
+                overallStatus.style.background = 'rgba(220, 53, 69, 0.2)';
+            }
+        }
+
+        function render() {
+            const container = document.getElementById('itemsContainer');
+            container.innerHTML = '';
+
+            mrItems.forEach(item => {
+                const totalDatang = item.arrivals.reduce((sum, a) => sum + a.qty, 0);
+                const sisa = item.qty_pesan - totalDatang;
+                const progress = (totalDatang / item.qty_pesan) * 100;
+                const status = sisa <= 0 ? 'Selesai' : (totalDatang > 0 ? 'Partial' : 'Pending');
+                const statusClass = sisa <= 0 ? 'status-selesai' : (totalDatang > 0 ? 'status-partial' : 'status-pending');
+
+                let html = `
+                    <div class="item-card">
+                        <div class="item-header">
+                            <div>
+                                <div class="item-title">📦 ${item.nama}</div>
+                                <div class="item-subtitle">Item ID: #${item.id}</div>
+                            </div>
+                            <span class="status-badge ${statusClass}">${status}</span>
+                        </div>
+
+                        <div class="stats-row">
+                            <div class="stat-box">
+                                <div class="label">Qty Pesan</div>
+                                <div class="value">${item.qty_pesan}</div>
+                            </div>
+                            <div class="stat-box highlight">
+                                <div class="label">Total Datang</div>
+                                <div class="value">${totalDatang}</div>
+                            </div>
+                            <div class="stat-box ${sisa > 0 ? '' : 'highlight'}">
+                                <div class="label">Sisa</div>
+                                <div class="value">${sisa < 0 ? 0 : sisa}</div>
+                            </div>
+                        </div>
+
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: ${progress}%"></div>
+                        </div>
+
+                        <div class="arrivals-section">
+                            <div class="section-title">
+                                <span>📥</span>
+                                <span>Riwayat Kedatangan (${item.arrivals.length})</span>
+                            </div>
+                `;
+
+                if (item.arrivals.length > 0) {
+                    html += `
+                        <table class="arrivals-table">
+                            <thead>
+                                <tr>
+                                    <th>Qty Datang</th>
+                                    <th>Tanggal</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    
+                    item.arrivals.forEach(a => {
+                        html += `
+                            <tr>
+                                <td><strong>${a.qty}</strong></td>
+                                <td>${formatDate(a.tanggal)}</td>
+                                <td>${a.remarks || '-'}</td>
+                            </tr>
+                        `;
+                    });
+
+                    html += `
+                            </tbody>
+                        </table>
+                    `;
+                } else {
+                    html += `
+                        <div class="empty-state">
+                            <div class="icon">📭</div>
+                            <p>Belum ada kedatangan untuk item ini</p>
+                        </div>
+                    `;
+                }
+
+                html += `</div>`; // Close arrivals-section
+
+                // Form input hanya muncul kalau belum selesai
+                if (sisa > 0) {
+                    html += `
+                        <div class="input-section">
+                            <div class="input-section-title">
+                                <span>➕</span>
+                                <span>Tambah Kedatangan Baru</span>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Qty Datang *</label>
+                                    <input type="number" id="qty_${item.id}" placeholder="Masukkan jumlah" min="1" max="${sisa}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Tanggal Datang *</label>
+                                    <input type="date" id="tgl_${item.id}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Remarks</label>
+                                    <textarea id="rem_${item.id}" placeholder="Catatan tambahan (opsional)"></textarea>
+                                </div>
+                            </div>
+                            <button class="submit-btn" onclick="submitArrival(${item.id})">
+                                <span>✓</span>
+                                <span>Submit Kedatangan</span>
+                            </button>
+                        </div>
+                    `;
+                }
+
+                html += `</div>`; // Close item-card
+
+                container.innerHTML += html;
+            });
+
+            updateSummary();
+        }
+
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('id-ID', options);
+        }
+
+        function submitArrival(id) {
+            const item = mrItems.find(i => i.id === id);
+            const qtyInput = document.getElementById(`qty_${id}`);
+            const tglInput = document.getElementById(`tgl_${id}`);
+            const remInput = document.getElementById(`rem_${id}`);
+            
+            const qty = parseInt(qtyInput.value);
+            const tgl = tglInput.value;
+            const rem = remInput.value;
+
+            // Validasi
+            if (!qty || qty <= 0) {
+                alert('⚠️ Qty datang harus diisi dengan angka yang valid!');
+                qtyInput.focus();
+                return;
+            }
+
+            if (!tgl) {
+                alert('⚠️ Tanggal datang wajib diisi!');
+                tglInput.focus();
+                return;
+            }
+
+            const totalDatang = item.arrivals.reduce((sum, a) => sum + a.qty, 0);
+            const sisa = item.qty_pesan - totalDatang;
+
+            if (qty > sisa) {
+                alert(`⚠️ Qty datang (${qty}) melebihi sisa yang dibutuhkan (${sisa})!`);
+                qtyInput.focus();
+                return;
+            }
+
+            // Tambahkan kedatangan
+            item.arrivals.push({
+                qty: qty,
+                tanggal: tgl,
+                remarks: rem || '-'
+            });
+
+            // Sukses message
+            const newTotal = totalDatang + qty;
+            const newSisa = item.qty_pesan - newTotal;
+            
+            let message = `✓ Kedatangan berhasil ditambahkan!\n\n`;
+            message += `Item: ${item.nama}\n`;
+            message += `Qty Datang: ${qty}\n`;
+            message += `Total Datang: ${newTotal} / ${item.qty_pesan}\n`;
+            message += `Sisa: ${newSisa < 0 ? 0 : newSisa}\n`;
+            
+            if (newSisa <= 0) {
+                message += `\n🎉 Item ini sudah SELESAI!`;
+            }
+
+            alert(message);
+
+            // Re-render
+            render();
+        }
+
+        // Set default date to today
+        function setDefaultDates() {
+            const today = new Date().toISOString().split('T')[0];
+            mrItems.forEach(item => {
+                const dateInput = document.getElementById(`tgl_${item.id}`);
+                if (dateInput) {
+                    dateInput.value = today;
+                }
+            });
+        }
+
+        // Initial render
+        render();
+        setTimeout(setDefaultDates, 100);
+    </script>
+</body>
+</html>
